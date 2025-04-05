@@ -1,0 +1,19 @@
+type User {
+  id: string
+  name: string
+  email: string
+  phone: string
+}
+
+error InvalidCredentials {
+  message: string
+}
+
+error UserNotFound {
+  userId: string
+}
+
+fn signup(name: string, email: string, password: string, phone: string): User
+fn login(email: string, password: string): User
+fn getProfile(userId: string): User
+fn logout(): bool
