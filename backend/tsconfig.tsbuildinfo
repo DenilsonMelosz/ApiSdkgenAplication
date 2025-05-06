@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/config/firebase.ts","./src/controllers/authcontroller.ts","./src/generated/api-server.ts","./src/generated/api-types.ts","./src/middleware/middleware.ts","./src/repository/authrepository.ts","./src/utils/jwt.ts"],"version":"5.8.3"}

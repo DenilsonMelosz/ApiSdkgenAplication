@@ -1,0 +1,1 @@
+{"version":3,"file":"test.js","sourceRoot":"","sources":["test.ts"],"names":[],"mappings":";;AACA,OAAO,CAAC,GAAG,CAAC,UAAU,CAAC,CAAC","sourcesContent":["import { signup } from \"./authController\";\r\nconsole.log('Teste OK');"]}

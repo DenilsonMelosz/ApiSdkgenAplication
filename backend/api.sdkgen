@@ -1,0 +1,24 @@
+type User {
+  id: string
+  name: string
+  email: string
+  phone: string
+}
+
+type AuthResponse {
+  token: string
+  user: User
+}
+
+error InvalidCredentials {
+  message: string
+}
+
+error UserNotFound {
+  userId: string
+}
+
+fn signup(name: string, email: string, password: string, phone: string): AuthResponse
+fn login(email: string, password: string): AuthResponse
+fn getProfile(): User
+fn logout(): bool

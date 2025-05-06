@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@sdkgen/browser-runtime": "^2.3.2",
+    "@sdkgen/node-runtime": "^2.3.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@sdkgen/cli": "^2.3.2",
+    "typescript": "^5.8.3"
+  }
+}
