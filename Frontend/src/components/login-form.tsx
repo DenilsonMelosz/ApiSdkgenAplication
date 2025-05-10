@@ -34,7 +34,7 @@ export function LoginForm() {
     },
   })
 
-  // Handle form
+  
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true)
 
@@ -49,13 +49,16 @@ export function LoginForm() {
       localStorage.setItem("token", token)
       localStorage.setItem("user", JSON.stringify(user))
 
+      
       toast({
         title: "Login concluído",
         description: `Bem-vindo(a), ${user.name}!`,
       })
 
-      // Redireciona após login bem-sucedido
-      window.location.href = "/profile"
+      setTimeout(() => {
+        window.location.href = "/profile"
+      }, 2000)
+
     } catch (err) {
       if (err instanceof InvalidCredentials) {
         toast({
@@ -65,7 +68,7 @@ export function LoginForm() {
         })
       } else {
         toast({
-          title: "Erro no login",
+          title: "E-mail ou senha incorreto",
           description: "Erro ao fazer login",
           variant: "destructive",
         })

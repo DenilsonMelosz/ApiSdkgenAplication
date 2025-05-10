@@ -70,7 +70,7 @@ export function SignupForm() {
     setError(null)
 
     try {
-      const user = await api.signup({
+      await api.signup({
         name: values.name,
         email: values.email,
         password: values.password,
