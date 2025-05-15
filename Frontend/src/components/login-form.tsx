@@ -12,12 +12,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { useToast } from "@/hooks/use-toast"
 
-// Assumindo que você terá uma implementação similar do ApiClient
 const api = new ApiClient("http://localhost:8000")
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Por favor, insira um email válido" }),
-  password: z.string().min(6, { message: "Senha obrigatória" }),
+  email: z.string().email({ message: "Por favor, insira um email válido!" }),
+  password: z.string().min(6, { message: "Senha é obrigatória!" }),
 })
 
 export function LoginForm() {
@@ -25,7 +24,7 @@ export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
   const { toast } = useToast()
 
-  // Inicializando o form com react-hook-form e zod validação 
+  // form com zod
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,13 +47,12 @@ export function LoginForm() {
 
       localStorage.setItem("token", token)
       localStorage.setItem("user", JSON.stringify(user))
-
-      
+           
       toast({
         title: "Login concluído",
         description: `Bem-vindo(a), ${user.name}!`,
       })
-
+        // tempo de exibição do toast
       setTimeout(() => {
         window.location.href = "/profile"
       }, 2000)
@@ -101,7 +99,7 @@ export function LoginForm() {
                   <FormControl>
                     <Input
                       placeholder="Digite seu e-mail"
-                      type="email"
+                      type="text"
                       {...field}
                       className="focus-visible:ring-primary-dark"
                     />

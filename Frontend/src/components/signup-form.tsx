@@ -162,7 +162,7 @@ export function SignupForm() {
                   <FormControl>
                     <Input
                       placeholder="Digite seu e-mail"
-                      type="email"
+                      type="text"
                       {...field}
                       className="focus-visible:ring-primary-dark"
                     />

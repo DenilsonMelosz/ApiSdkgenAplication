@@ -18,8 +18,7 @@ export function ProfilePage() {
     if (storedToken) {
       // Cria a instância do AuthenticatedApiClient com o token armazenado
       const api = new AuthenticatedApiClient("http://localhost:8000", storedToken)
-
-      // Chama getProfile sem enviar parâmetros extras, pois o token já é enviado no header
+     
       api
         .getProfile()
         .then((data) => {

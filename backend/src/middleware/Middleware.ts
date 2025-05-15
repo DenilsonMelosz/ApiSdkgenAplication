@@ -5,7 +5,6 @@ import { InvalidCredentials } from "../generated/api-server";
 const publicRoutes = ["signup", "login"];
 
 export const Middleware = async (ctx: any, next: () => Promise<any>) => {
-  console.log(` Confirmando o acesso para função: ${ctx.request.name}`);
 
   // Permitindo as chamadas públicas
   if (publicRoutes.includes(ctx.request.name)) {
