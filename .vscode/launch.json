@@ -7,7 +7,7 @@
             "name": "Launch Node Server",
             "program": "${workspaceFolder}/backend/src/index.js", 
             "envFile": "${workspaceFolder}/backend/.env",   
-            "outFiles": ["${workspaceFolder}/backend/src/middleware/Middleware.js"],
+            "outFiles": ["${workspaceFolder}/backend/src/controllers/authController.js"],
 
             "env": {
                 "HTTP_PORT": "8101"                

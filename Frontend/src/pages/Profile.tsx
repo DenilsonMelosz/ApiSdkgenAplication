@@ -3,9 +3,9 @@ import type { User } from "@/lib/api-client"
 import { AuthenticatedApiClient } from "@/lib/authenticatedApi"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Badge } from "@/components/ui/badge"
+import { NavBar } from "@/components/nav-bar"
 
 export function ProfilePage() {
   const [user, setUser] = useState<User | null>(null)
@@ -18,7 +18,8 @@ export function ProfilePage() {
     if (storedToken) {
       // Cria a instância do AuthenticatedApiClient com o token armazenado
       const api = new AuthenticatedApiClient("http://localhost:8000", storedToken)
-     
+
+      // Chama getProfile sem enviar parâmetros extras, pois o token já é enviado no header
       api
         .getProfile()
         .then((data) => {
@@ -43,36 +44,21 @@ export function ProfilePage() {
       .substring(0, 2)
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem("user")
-    localStorage.removeItem("token")
-    window.location.href = "/"
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 font-sans">
       {/* Barra de navegação */}
-      <nav className="sticky top-0 left-0 right-0 h-[60px] bg-white flex justify-between items-center px-4 md:px-5 shadow-md z-50">
-        <div className="text-lg md:text-xl font-bold text-primary-dark">MINHA API SDK</div>
-        <Button
-          onClick={handleLogout}
-          className="bg-gradient-to-r from-primary-dark to-primary-darker text-white rounded-full"
-          size="sm"
-        >
-          Sair <span className="ml-1">↪</span>
-        </Button>
-      </nav>
+      <NavBar title="Meu Perfil" showBackButton={true} backUrl="/home" showProfileButton={false} />
 
       {/* Conteúdo principal */}
       <main className="flex justify-center px-4 py-6 md:py-8">
-        <Card className="w-full max-w-[500px] overflow-hidden relative mx-auto border-primary-dark">
+        <Card className="w-full max-w-[500px] overflow-hidden relative mx-auto border-purple-200 shadow-md">
           {/* Banner do perfil */}
-          <div className="h-[100px] md:h-[130px] bg-gradient-to-r from-primary-dark to-primary-darker relative"></div>
+          <div className="h-[100px] md:h-[130px] bg-gradient-to-r from-purple-600 to-pink-500 relative"></div>
 
           {/* Container do avatar */}
           <div className="flex justify-center relative mt-[-40px] md:mt-[-50px]">
             <Avatar className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] border-4 border-white shadow-md">
-              <AvatarFallback className="bg-primary-dark text-white text-[22px] md:text-[28px] font-bold">
+              <AvatarFallback className="bg-purple-700 text-white text-[22px] md:text-[28px] font-bold">
                 {user ? getInitials(user.name) : "?"}
               </AvatarFallback>
             </Avatar>
@@ -92,7 +78,7 @@ export function ProfilePage() {
                 Perfil
               </Badge>
               <Badge variant="secondary" className="bg-purple-50 text-purple-600 hover:bg-purple-100">
-                Usuário
+                {user?.role?.toUpperCase() === "ADMIN" ? "Administrador" : "Usuário"}
               </Badge>
             </div>
           </CardHeader>
@@ -110,6 +96,12 @@ export function ProfilePage() {
                 <ProfileItem icon="👤" label="Nome" value={user.name} />
                 <ProfileItem icon="✉️" label="Email" value={user.email} />
                 <ProfileItem icon="📞" label="Telefone" value={user.phone || "Não informado"} />
+                {user.role && (
+                  <ProfileItem
+                      icon="🔑"
+                      label="Tipo de Conta"
+                      value={user.role.toUpperCase() === "ADMIN" ? "Administrador" : "Usuário"} />
+                )}
               </div>
             ) : (
               <div className="text-center p-4 md:p-5 text-gray-500">

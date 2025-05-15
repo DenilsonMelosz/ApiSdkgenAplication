@@ -54,7 +54,7 @@ export function LoginForm() {
       })
         // tempo de exibição do toast
       setTimeout(() => {
-        window.location.href = "/profile"
+        window.location.href = "/home"
       }, 2000)
 
     } catch (err) {

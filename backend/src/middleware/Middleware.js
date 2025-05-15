@@ -3,11 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Middleware = void 0;
 const jwt_1 = require("../utils/jwt");
 const api_server_1 = require("../generated/api-server");
-// Funções públicas que não exigem autenticação
-const publicRoutes = ["signup", "login"];
 const Middleware = async (ctx, next) => {
-    console.log(` Verificando acesso para função: ${ctx.request.name}`);
-    // Permitindo as chamadas públicas
+    console.log(`Confirmando o acesso para função: ${ctx.request.name}`);
+    const publicRoutes = ["signup", "login"];
     if (publicRoutes.includes(ctx.request.name)) {
         return await next();
     }
@@ -20,9 +18,11 @@ const Middleware = async (ctx, next) => {
     const token = authHeader.replace("Bearer ", "");
     try {
         const payload = (0, jwt_1.verifyToken)(token);
-        ctx.request.args.userId = payload.userId;
-        const reply = await next();
-        return reply;
+        ctx.request.args.extra = {
+            userId: payload.userId,
+            role: payload.role,
+        };
+        return await next();
     }
     catch (err) {
         throw new api_server_1.InvalidCredentials("InvalidCredentials", {

@@ -1,12 +1,11 @@
 import { verifyToken } from "../utils/jwt";
 import { InvalidCredentials } from "../generated/api-server";
 
-// Funções públicas que não exigem autenticação
-const publicRoutes = ["signup", "login"];
-
 export const Middleware = async (ctx: any, next: () => Promise<any>) => {
+  console.log(`Confirmando o acesso para função: ${ctx.request.name}`);
 
-  // Permitindo as chamadas públicas
+  const publicRoutes = ["signup", "login"];
+
   if (publicRoutes.includes(ctx.request.name)) {
     return await next();
   }
@@ -23,13 +22,17 @@ export const Middleware = async (ctx: any, next: () => Promise<any>) => {
 
   try {
     const payload = verifyToken(token);
-    ctx.request.args.userId = payload.userId;
 
-    const reply = await next();
-    return reply;
+    ctx.request.args.extra = {
+      userId: payload.userId,
+      role: payload.role,
+    };
+
+    return await next();
   } catch (err) {
     throw new InvalidCredentials("InvalidCredentials", {
       message: "Token inválido ou expirado",
     });
   }
 };
+

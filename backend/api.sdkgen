@@ -1,8 +1,11 @@
+type UserRole string
+
 type User {
   id: string
   name: string
   email: string
   phone: string
+  role: UserRole
 }
 
 type AuthResponse {
@@ -18,7 +21,16 @@ error UserNotFound {
   userId: string
 }
 
+error AccessDenied {
+  message: string
+}
+
 fn signup(name: string, email: string, password: string, phone: string): AuthResponse
 fn login(email: string, password: string): AuthResponse
 fn getProfile(): User
 fn logout(): bool
+
+fn listUsers(): User[]
+fn deleteUser(userId: string): bool
+fn generateNewPassword(userId: string): string
+fn updateOwnProfile(name: string, phone: string, email: string, password: string): User

@@ -1,9 +1,7 @@
-import { api, InvalidCredentials, UserNotFound } from "../generated/api-server";
+import { api, InvalidCredentials, UserNotFound, AccessDenied } from "../generated/api-server";
 import { authRepository } from "../repository/authRepository";
 import { auth } from "../config/firebase";
 import { generateToken, verifyToken } from "../utils/jwt"; 
-
-
 
 interface DatabaseUser {
   id: string;
@@ -12,6 +10,7 @@ interface DatabaseUser {
   password: string;
   phone: string;
   createdAt: number;
+  role: "ADMIN" | "COMUM";
 }
 
 function formatPhoneNumber(phone: string): string {
@@ -20,6 +19,9 @@ function formatPhoneNumber(phone: string): string {
   }
   return phone;
 }
+
+// Definindo defaultRole para usar no signup
+const defaultRole: "ADMIN" | "COMUM" = "COMUM";
 
 export async function signup(
   ctx: any,
@@ -59,10 +61,11 @@ export async function signup(
       name,
       email,
       password,
-      phone
+      phone,
+      defaultRole
     );
 
-    const token = generateToken({ userId: dbUser.id });
+    const token = generateToken({ userId: dbUser.id, role: dbUser.role });
 
     return {
       token,
@@ -71,6 +74,7 @@ export async function signup(
         name: dbUser.name,
         email: dbUser.email,
         phone: dbUser.phone,
+        role: dbUser.role,
       },
     };
   } catch (error) {
@@ -80,7 +84,6 @@ export async function signup(
     });
   }
 }
-
 
 export async function login(
   ctx: any,
@@ -94,7 +97,7 @@ export async function login(
     });
   }
 
-  const token = generateToken({ userId: user.id });
+  const token = generateToken({ userId: user.id, role: user.role });
 
   return {
     token,
@@ -103,10 +106,10 @@ export async function login(
       name: user.name,
       email: user.email,
       phone: user.phone,
+      role: user.role,
     },
   };
 }
-
 
 export async function getProfile(ctx: any) {
   const userId = ctx.request.args.extra.userId;
@@ -122,10 +125,83 @@ export async function getProfile(ctx: any) {
     name: user.name,
     email: user.email,
     phone: user.phone,
+    role: user.role,
   };
 }
 
-
 export async function logout(ctx: any) {
   return true; // A invalidação de token é feita no cliente
+}
+
+// Atualizar perfil do usuário
+
+export async function updateOwnProfile(
+  ctx: any,
+  { name, phone, email, password }: { name: string; phone: string; email: string; password: string }
+) {
+  const userId = ctx.request.args.extra.userId;
+
+  const user = await authRepository.getUserById(userId);
+  if (!user) {
+    throw new UserNotFound("UserNotFound", { userId });
+  }
+
+  const updatedUser: DatabaseUser = {
+    ...user,
+    name: name || user.name,
+    phone: phone || user.phone,
+    email: email || user.email,
+    password: password || user.password,
+  };
+
+  await authRepository.updateUser(updatedUser);
+
+  return {
+    id: updatedUser.id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    phone: updatedUser.phone,
+    role: updatedUser.role,
+  };
+}
+
+// Listar usuários (requer ADMIN)
+export async function listUsers(ctx: any) {
+  if (ctx.request.args.extra.role !== "ADMIN") {
+    throw new AccessDenied("AccessDenied", { message: "Apenas administradores podem listar usuários" });
+  }
+
+  const users = await authRepository.listUsers();
+
+  return users.map((user: DatabaseUser) => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    role: user.role,
+  }));
+}
+
+// Deletar usuário por ID (requer ADMIN)
+export async function deleteUser(ctx: any, { userId }: { userId: string }) {
+  if (ctx.request.args.extra.role !== "ADMIN") {
+    throw new AccessDenied("AccessDenied", { message: "Apenas administradores podem deletar usuários" });
+  }
+
+  const success = await authRepository.deleteUser(userId);
+  if (!success) {
+    throw new UserNotFound("UserNotFound", { userId });
+  }
+
+  return true;
+}
+
+// Gerar nova senha para um usuário (requer ADMIN)
+export async function generateNewPassword(ctx: any, { userId }: { userId: string }) {
+  if (ctx.request.args.extra.role !== "ADMIN") {
+    throw new AccessDenied("AccessDenied", { message: "Apenas administradores podem gerar nova senha" });
+  }
+
+  const newPassword = await authRepository.generateNewPassword(userId);
+  return newPassword;
 }

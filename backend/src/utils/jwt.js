@@ -10,12 +10,12 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const JWT_SECRET = process.env.JWT_SECRET || "chave_padrao_segura";
 const EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1h";
-// Gera um token JWT
+// Gera um token JWT com userId e role
 function generateToken(payload) {
     const options = { expiresIn: EXPIRES_IN };
     return jsonwebtoken_1.default.sign(payload, JWT_SECRET, options);
 }
-// Verifica e decodifica um token JWT
+// Verifica e decodifica o token JWT
 function verifyToken(token) {
     try {
         const decoded = jsonwebtoken_1.default.verify(token, JWT_SECRET);

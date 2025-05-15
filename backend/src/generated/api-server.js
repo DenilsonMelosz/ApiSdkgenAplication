@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.api = exports.ApiConfig = exports.UserNotFound = exports.InvalidCredentials = exports.Fatal = void 0;
+exports.api = exports.ApiConfig = exports.AccessDenied = exports.UserNotFound = exports.InvalidCredentials = exports.Fatal = void 0;
 /* eslint-disable */
 const node_runtime_1 = require("@sdkgen/node-runtime");
 var node_runtime_2 = require("@sdkgen/node-runtime");
@@ -11,6 +11,9 @@ exports.InvalidCredentials = InvalidCredentials;
 class UserNotFound extends node_runtime_1.SdkgenErrorWithData {
 }
 exports.UserNotFound = UserNotFound;
+class AccessDenied extends node_runtime_1.SdkgenErrorWithData {
+}
+exports.AccessDenied = AccessDenied;
 class ApiConfig extends node_runtime_1.BaseApiConfig {
     constructor() {
         super(...arguments);
@@ -24,6 +27,10 @@ class ApiConfig extends node_runtime_1.BaseApiConfig {
                 [
                     "UserNotFound",
                     "UserNotFoundData"
+                ],
+                [
+                    "AccessDenied",
+                    "AccessDeniedData"
                 ],
                 "Fatal"
             ],
@@ -51,6 +58,31 @@ class ApiConfig extends node_runtime_1.BaseApiConfig {
                 logout: {
                     args: {},
                     ret: "bool"
+                },
+                listUsers: {
+                    args: {},
+                    ret: "User[]"
+                },
+                deleteUser: {
+                    args: {
+                        userId: "string"
+                    },
+                    ret: "bool"
+                },
+                generateNewPassword: {
+                    args: {
+                        userId: "string"
+                    },
+                    ret: "string"
+                },
+                updateOwnProfile: {
+                    args: {
+                        name: "string",
+                        phone: "string",
+                        email: "string",
+                        password: "string"
+                    },
+                    ret: "User"
                 }
             },
             typeTable: {
@@ -60,16 +92,21 @@ class ApiConfig extends node_runtime_1.BaseApiConfig {
                 UserNotFoundData: {
                     userId: "string"
                 },
+                AccessDeniedData: {
+                    message: "string"
+                },
                 User: {
                     id: "string",
                     name: "string",
                     email: "string",
-                    phone: "string"
+                    phone: "string",
+                    role: "UserRole"
                 },
                 AuthResponse: {
                     token: "string",
                     user: "User"
-                }
+                },
+                UserRole: "string"
             }
         };
     }
