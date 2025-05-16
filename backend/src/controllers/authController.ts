@@ -20,7 +20,7 @@ function formatPhoneNumber(phone: string): string {
   return phone;
 }
 
-// Definindo defaultRole para usar no signup
+// Definindo defaultRole para usar no signup , todo usuario cadastrado será "COMUM"
 const defaultRole: "ADMIN" | "COMUM" = "COMUM";
 
 export async function signup(
@@ -182,7 +182,7 @@ export async function listUsers(ctx: any) {
   }));
 }
 
-// Deletar usuário por ID (requer ADMIN)
+// Deletar usuário por ID ( USUARIO ADMIN)
 export async function deleteUser(ctx: any, { userId }: { userId: string }) {
   if (ctx.request.args.extra.role !== "ADMIN") {
     throw new AccessDenied("AccessDenied", { message: "Apenas administradores podem deletar usuários" });
@@ -196,7 +196,7 @@ export async function deleteUser(ctx: any, { userId }: { userId: string }) {
   return true;
 }
 
-// Gerar nova senha para um usuário (requer ADMIN)
+// Gerar nova senha para um usuário ( USUARIO ADMIN )
 export async function generateNewPassword(ctx: any, { userId }: { userId: string }) {
   if (ctx.request.args.extra.role !== "ADMIN") {
     throw new AccessDenied("AccessDenied", { message: "Apenas administradores podem gerar nova senha" });

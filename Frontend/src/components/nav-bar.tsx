@@ -1,5 +1,3 @@
-"use client"
-
 import type { ReactNode } from "react"
 import { ArrowLeft, Cog, HomeIcon, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -30,7 +28,7 @@ export function NavBar({
   const handleLogout = () => {
     localStorage.removeItem("user")
     localStorage.removeItem("token")
-    window.location.href = "/login"
+    window.location.href = "/"
   }
 
   return (

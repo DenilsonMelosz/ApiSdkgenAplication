@@ -53,7 +53,7 @@ export function ProfilePage() {
       <main className="flex justify-center px-4 py-6 md:py-8">
         <Card className="w-full max-w-[500px] overflow-hidden relative mx-auto border-purple-200 shadow-md">
           {/* Banner do perfil */}
-          <div className="h-[100px] md:h-[130px] bg-gradient-to-r from-purple-600 to-pink-500 relative"></div>
+          <div className="h-[100px] md:h-[130px] bg-gradient-to-br from-purple-50 to-pink-50"></div>
 
           {/* Container do avatar */}
           <div className="flex justify-center relative mt-[-40px] md:mt-[-50px]">

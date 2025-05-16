@@ -13,7 +13,7 @@ export  function Home() {
   useEffect(() => {
     const token = localStorage.getItem("token")
     if (!token) {
-      window.location.href = "/login"
+      window.location.href = "/"
     } else {
       const api = new AuthenticatedApiClient("http://localhost:8000", token)
       api.getProfile().then(setUser).catch(console.error)
@@ -65,7 +65,7 @@ export  function Home() {
                 onClick={handleGoToProfile}
               >
                 <User className="mr-2 h-5 w-5 text-purple-600" />
-                Gerenciar Perfil
+                Perfil
               </Button>
             </CardContent>
             <CardFooter className="bg-purple-50 px-6 py-4">

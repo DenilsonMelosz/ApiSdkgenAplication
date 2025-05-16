@@ -11,7 +11,7 @@ type JwtPayload = {
   role: "ADMIN" | "COMUM";
 };
 
-// Gera um token JWT com userId e role
+// Gerando o token JWT com userId e role
 export function generateToken(payload: JwtPayload): string {
     const options: SignOptions = { expiresIn: EXPIRES_IN as SignOptions["expiresIn"] };
     return jwt.sign(payload, JWT_SECRET, options);

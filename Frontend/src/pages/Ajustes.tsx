@@ -18,14 +18,13 @@ export function Ajustes() {
   useEffect(() => {
     const token = localStorage.getItem("token")
     if (!token) {
-      window.location.href = "/login"
+      window.location.href = "/"
     } else {
       const api = new AuthenticatedApiClient("http://localhost:8000", token)
       api.getProfile().then(setCurrentUser).catch(console.error)
     }
   }, [])
 
-  // Função que será passada para o UserModal.onSave
   async function handleSave(updatedUser: Partial<UserType> & { password?: string }) {
   if (!currentUser) return
 
@@ -123,7 +122,6 @@ export function Ajustes() {
         </div>
       </main>
 
-      {/* Passa onSave para o UserModal */}
       <UserModal
         isOpen={isUserModalOpen}
         onOpenChange={setIsUserModalOpen}
