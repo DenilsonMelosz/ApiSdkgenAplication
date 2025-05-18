@@ -5,6 +5,10 @@ import { ProfilePage } from "../pages/Profile";
 import { Home } from "../pages/Home";
 import { Ajustes } from "../pages/Ajustes";
 import { PrivateRoute } from "./privateRoute";
+import { Unauthorized } from "../pages/Unauthorized";
+import { Settings } from "../pages/Settings";
+
+
 
 function AppRoutes() {
   return (
@@ -38,6 +42,19 @@ function AppRoutes() {
           </PrivateRoute>
         }
       />
+
+      <Route
+        path="/Settings"
+        element={
+            <PrivateRoute requiredRole="ADMIN">
+            <Settings />
+          </PrivateRoute>
+        }
+      />
+
+      
+      {/* Redireciona para não autorizado */}
+      <Route path="/unauthorized" element={<Unauthorized />} />
 
       {/* Redireciona para login por padrão */}
       <Route path="*" element={<Navigate to="/" replace />} />

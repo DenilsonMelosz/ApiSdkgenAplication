@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
-import { Settings, User } from "lucide-react"
-
+import { Settings, User, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { AuthenticatedApiClient } from "@/lib/authenticatedApi"
@@ -27,6 +26,12 @@ export  function Home() {
   const handleGoToSettings = () => {
     window.location.href = "/ajustes"
   }
+
+  const handleGoToAdmin = () => {
+    window.location.href = "/Settings"
+  }
+
+    if (!user) return null;
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-purple-50 to-pink-50">
@@ -55,7 +60,7 @@ export  function Home() {
                 onClick={handleGoToSettings}
                 size="lg"
               >
-                <Settings className="mr-2 h-5 w-5 text-purple-600" />
+                <Settings className="mr-2 h-5 w-5 text-purple-800" />
                 Ajustes de Conta
               </Button>
               <Button
@@ -66,6 +71,16 @@ export  function Home() {
               >
                 <User className="mr-2 h-5 w-5 text-purple-600" />
                 Perfil
+              </Button>
+
+              <Button
+                variant="outline"
+                className="justify-start border-purple-200 bg-white text-purple-800 hover:bg-purple-100"
+                onClick={handleGoToAdmin}
+                size="lg"
+              >
+                <ShieldCheck className="mr-2 h-5 w-5 text-green-600" />
+                Admin pagina
               </Button>
             </CardContent>
             <CardFooter className="bg-purple-50 px-6 py-4">

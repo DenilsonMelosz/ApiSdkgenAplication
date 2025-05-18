@@ -130,7 +130,7 @@ export async function getProfile(ctx: any) {
 }
 
 export async function logout(ctx: any) {
-  return true; // A invalidação de token é feita no cliente
+  return true; 
 }
 
 // Atualizar perfil do usuário

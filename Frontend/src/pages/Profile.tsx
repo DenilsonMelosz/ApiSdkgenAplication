@@ -44,6 +44,8 @@ export function ProfilePage() {
       .substring(0, 2)
   }
 
+        if (!user) return null;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 font-sans">
       {/* Barra de navegação */}

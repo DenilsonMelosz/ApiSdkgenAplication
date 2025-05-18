@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Pencil, UserCog } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -15,38 +15,37 @@ export function Ajustes() {
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false)
   const [currentUser, setCurrentUser] = useState<UserType | null>(null)
 
+  const token = useMemo(() => localStorage.getItem("token"), [])
+  const api = useMemo(() => {
+    if (!token) return null
+    return new AuthenticatedApiClient("http://localhost:8000", token)
+  }, [token])
+
   useEffect(() => {
-    const token = localStorage.getItem("token")
-    if (!token) {
+    if (!token || !api) {
       window.location.href = "/"
     } else {
-      const api = new AuthenticatedApiClient("http://localhost:8000", token)
       api.getProfile().then(setCurrentUser).catch(console.error)
     }
-  }, [])
+  }, [api, token])
 
   async function handleSave(updatedUser: Partial<UserType> & { password?: string }) {
-  if (!currentUser) return
+    if (!currentUser || !api) return
 
-  try {
-    const token = localStorage.getItem("token")
-    if (!token) throw new Error("Token não encontrado")
+    try {
+      const updated = await api.updateOwnProfile({
+        name: updatedUser.name ?? currentUser.name,
+        phone: updatedUser.phone ?? currentUser.phone ?? "",
+        email: updatedUser.email ?? currentUser.email,
+        password: updatedUser.password ?? ""
+      })
 
-    const api = new AuthenticatedApiClient("http://localhost:8000", token)
-
-    const updated = await api.updateOwnProfile({
-      name: updatedUser.name ?? currentUser.name,
-      phone: updatedUser.phone ?? currentUser.phone ?? "",
-      email: updatedUser.email ?? currentUser.email,
-      password: updatedUser.password ?? ""
-    })
-
-    setCurrentUser(updated)
-    setIsUserModalOpen(false)
-  } catch (error) {
-    console.error("Erro ao atualizar perfil:", error)
+      setCurrentUser(updated)
+      setIsUserModalOpen(false)
+    } catch (error) {
+      console.error("Erro ao atualizar perfil:", error)
+    }
   }
-}
 
   if (!currentUser) return null
 
